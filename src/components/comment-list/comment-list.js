@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import Loader from '../common/loader'
 import { loadArticleComments } from '../../ac'
 import { Consumer as AuthConsumer } from '../../contexts/auth'
+import i18n from '../i18n'
 
 class CommentList extends Component {
   static propTypes = {
@@ -32,9 +33,8 @@ class CommentList extends Component {
   }
 
   render() {
-    const { isOpen, toggleOpenItem } = this.props
-    const text = isOpen ? 'hide comments' : 'show comments'
-
+    const { isOpen, toggleOpenItem, t } = this.props
+    const text = t(isOpen ? 'hide comments' : 'show comments')
     return (
       <div>
         <button onClick={toggleOpenItem} className="test--comment-list__btn">
@@ -54,7 +54,8 @@ class CommentList extends Component {
   getBody() {
     const {
       article: { comments = [], id, commentsLoading, commentsLoaded },
-      isOpen
+      isOpen,
+      t
     } = this.props
 
     if (!isOpen) return null
@@ -69,7 +70,7 @@ class CommentList extends Component {
         {comments.length ? (
           this.comments
         ) : (
-          <h3 className="test--comment-list__empty">No comments yet</h3>
+          <h3 className="test--comment-list__empty">{t('No comments yet')}</h3>
         )}
         <CommentForm articleId={id} />
       </div>
@@ -91,4 +92,4 @@ class CommentList extends Component {
 export default connect(
   null,
   { loadArticleComments }
-)(toggleOpenItem(CommentList))
+)(i18n(toggleOpenItem(CommentList)))
